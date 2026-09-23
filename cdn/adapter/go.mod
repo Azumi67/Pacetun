@@ -1,4 +1,4 @@
-module example.com/pacetun/utls-bridge
+module github.com/Azumi67/Pacetun/cdn/adapter
 
 go 1.26.0
 
