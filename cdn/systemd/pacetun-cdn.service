@@ -1,0 +1,27 @@
+[Unit]
+Description=PaceTun CDN forward link
+Wants=network-online.target
+After=network-online.target
+[Service]
+Type=simple
+User=root
+RuntimeDirectory=pacetun-cdn
+RuntimeDirectoryMode=0700
+ExecStartPre=/usr/local/bin/pacetun-cdn --config /etc/pacetun-cdn/tunnel.conf --check-config
+ExecStart=/usr/local/bin/pacetun-cdn --config /etc/pacetun-cdn/tunnel.conf
+Restart=on-failure
+RestartSec=3
+TimeoutStopSec=15
+UMask=0077
+NoNewPrivileges=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/run/pacetun-cdn
+PrivateTmp=true
+CapabilityBoundingSet=CAP_NET_ADMIN
+LimitNOFILE=4096
+RestrictSUIDSGID=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+[Install]
+WantedBy=multi-user.target
