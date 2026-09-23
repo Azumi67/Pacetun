@@ -1,0 +1,28 @@
+[Unit]
+Description=PaceTun optional verified uTLS bridge (Iran only)
+Wants=network-online.target
+After=network-online.target
+[Service]
+Type=simple
+User=root
+Group=root
+RuntimeDirectory=pacetun-utls
+RuntimeDirectoryMode=0700
+UMask=0077
+ExecStart=/usr/local/bin/pacetun-utls-bridge --socket /run/pacetun-utls/bridge.sock --remote yoursubdomain:443 --server-name yoursubdomain --ca /etc/ssl/certs/ca-certificates.crt --fingerprint firefox120 --family auto --max-sessions 6
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=true
+ProtectHome=true
+ProtectSystem=strict
+PrivateTmp=true
+ReadWritePaths=/run/pacetun-utls
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+LimitNOFILE=4096
+CapabilityBoundingSet=
+RestrictSUIDSGID=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+[Install]
+WantedBy=multi-user.target
