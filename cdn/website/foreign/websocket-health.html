@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      name="description"
+      content="چرا پاسخ ۱۰۱ پایان عیب‌یابی نیست و باید مسیر داده را جداگانه بررسی کرد."
+    />
+    <meta name="theme-color" content="#0b1831" />
+    <meta name="robots" content="index,follow" />
+    <link
+      rel="canonical"
+      href="https://ws-edge.azumi87blog.beauty/websocket-health.html"
+    />
+    <link rel="stylesheet" href="/assets/editorial-2026.css?v=2" />
+    <title>وقتی WebSocket وصل می‌شود اما داده عبور نمی‌کند | دفتر فناوری</title>
+  </head>
+  <body>
+    <a class="skip" href="#main">پرش به محتوا</a>
+    <header class="header">
+      <div class="wrap nav">
+        <a class="brand" href="/"
+          ><span class="mark">د</span
+          ><span>دفتر فناوری<small>راهنمای عملی شبکه و وب</small></span></a
+        >
+        <nav aria-label="ناوبری اصلی">
+          <a href="/">خانه</a><a href="/articles.html">مقاله‌ها</a
+          ><a href="/about.html">درباره</a>
+        </nav>
+      </div>
+    </header>
+    <main id="main" class="wrap page">
+      <article class="article">
+        <div class="article-head">
+          <span class="eyebrow dark">راهنمای کاربردی / دفتر فناوری</span>
+          <h1>وقتی WebSocket وصل می‌شود اما داده عبور نمی‌کند</h1>
+          <p>
+            چرا پاسخ ۱۰۱ پایان عیب‌یابی نیست و باید مسیر داده را جداگانه بررسی
+            کرد.
+          </p>
+          <div class="article-meta">
+            انتشار: شهریور ۱۴۰۵ · زمان مطالعه: حدود ۵ دقیقه
+          </div>
+        </div>
+        <figure class="article-hero">
+          <img
+            src="/assets/cdn.svg"
+            loading="lazy"
+            width="920"
+            height="580"
+            alt="تصویرسازی آموزشی اختصاصی برای توضیح موضوع مقاله"
+          />
+        </figure>
+        <div class="article-body">
+          <h2>پاسخ ۱۰۱ دقیقاً چه چیزی را تأیید می‌کند؟</h2>
+          <p>
+            در WebSocket معمولی روی HTTP/1.1، مرورگر یا کلاینت درخواست Upgrade
+            می‌فرستد و پاسخ 101 Switching Protocols نشان می‌دهد سرور تغییر
+            پروتکل را پذیرفته است. این پاسخ فقط مرحلهٔ ارتقا را تأیید می‌کند؛ نه
+            اینکه برنامهٔ پشت اتصال احراز هویت شده، داده را درست دریافت می‌کند
+            یا مسیر خروجی سالم است.
+          </p>
+          <h2>مسیر را به چند مرحله بشکنیم</h2>
+          <p>
+            اول DNS و برقراری TCP را بررسی کنید. سپس اعتبار گواهی و نام میزبان
+            در TLS، پاسخ HTTP ارتقا، رسیدن فریم‌های WebSocket و در نهایت پاسخ
+            برنامه را جداگانه بسنجید. زمان هر مرحله را با برچسب خودش ثبت کنید؛
+            زمان اتصال لوپ‌بک Nginx را نباید تأخیر ایران تا سرور خارجی معرفی
+            کرد.
+          </p>
+          <h2>چرا CDN و Nginx ممکن است مسیر را تغییر دهند؟</h2>
+          <p>
+            در یک پراکسی معکوس، هدرهای Upgrade و Connection باید درست به بالادست
+            منتقل شوند. تنظیمات timeout، مسیر URL و در دسترس بودن برنامهٔ پشت
+            Nginx نیز اهمیت دارند. یک اتصال طولانی ممکن است به علت سیاست زمان
+            انتظار یا بسته شدن یکی از طرفین قطع شود. علت را از لاگ‌های هر لایه و
+            زمان رخدادها پیدا کنید، نه از حدس دربارهٔ یک خط ۱۰۱.
+          </p>
+          <h2>آزمایش سالم به چه شکل است؟</h2>
+          <p>
+            پس از مشاهدهٔ ۱۰۱، باید یک پیام آزمایشی مجاز در سطح برنامه بفرستید و
+            پاسخ معتبر همان برنامه را دریافت کنید. برای تونل رمزگذاری‌شده، تست
+            سلامتِ احراز هویت‌شده با تست سادهٔ TLS یا HTTP فرق دارد. اگر پیام
+            عبور نمی‌کند، مراحل را جدا ثبت کنید و پیش از تغییر هم‌زمان DNS،
+            گواهی یا پراکسی، معلوم کنید آخرین نقطهٔ موفق کجاست.
+          </p>
+        </div>
+        <section class="sources">
+          <h2>منابع و مطالعهٔ بیشتر</h2>
+          <p>
+            این مطلب آموزشی است و نتیجهٔ آزمایش روی اتصال شخصی خواننده نیست.
+          </p>
+          <ul>
+            <li>
+              <a
+                rel="noopener noreferrer"
+                target="_blank"
+                href="https://www.rfc-editor.org/rfc/rfc6455"
+                >پروتکل WebSocket — RFC 6455</a
+              >
+            </li>
+            <li>
+              <a
+                rel="noopener noreferrer"
+                target="_blank"
+                href="https://nginx.org/en/docs/http/websocket.html"
+                >مستندات رسمی Nginx برای پراکسی WebSocket</a
+              >
+            </li>
+          </ul>
+        </section>
+      </article>
+    </main>
+    <footer class="footer">
+      <div class="wrap footer-grid">
+        <div>
+          <strong>دفتر فناوری</strong>
+          <p>
+            مطالب آموزشی مبتنی بر مستندات فنی؛ بدون آمار ساختگی، تبلیغات یا
+            ادعای پایش زنده.
+          </p>
+        </div>
+        <div>
+          <a href="/articles.html">مقاله‌ها</a
+          ><a href="/about.html">دربارهٔ ما</a
+          ><a href="/sources.html">منابع و اعتبار تصاویر</a>
+        </div>
+      </div>
+      <div class="wrap footer-bottom">
+        نوشته‌های فارسی · بازبینی محتوایی: ۱۴۰۵ / ۲۰۲۶ · این وب‌سایت وابسته به
+        سازمان‌های منبع نیست.
+      </div>
+    </footer>
+  </body>
+</html>
